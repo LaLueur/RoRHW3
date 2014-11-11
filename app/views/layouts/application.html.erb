@@ -7,6 +7,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<%= link_to image_tag('logo.gif', width: 75), root_path %>
+
+<% if current_user %>
+    <%= link_to 'Logout', sessions_logout_path %>
+    <%= current_user.name %>
+<% else %>
+    <%= link_to 'Register', registration_path %>
+    <%= link_to 'Login', sessions_login_path %>
+<% end %>
 
 <%= yield %>
 

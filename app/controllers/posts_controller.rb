@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :check_auth, only: [:edit, :update, :destroy]
 
   # GET /posts
   # GET /posts.json
@@ -14,11 +15,16 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new
+    if current_user
+      @post = Post.new
+    else
+      redirect_to sessions_login_path
+    end
   end
 
   # GET /posts/1/edit
   def edit
+
   end
 
   # POST /posts
@@ -27,6 +33,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
 
     respond_to do |format|
+      @post.user = current_user if current_user
       if @post.save
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
@@ -42,7 +49,7 @@ class PostsController < ApplicationController
   def update
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+        format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
@@ -68,7 +75,14 @@ class PostsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def post_params
-      params.require(:post).permit(:title, :body, :tags)
+  def post_params
+    params.require(:post).permit(:title, :body, :tags)
+  end
+
+  def check_auth
+    if current_user != @post.user
+      flash[:notice] = "Sorry, you can not update, edit or delete this post. If it is yours just login please."
+      redirect_to post_path
     end
+  end
 end
