@@ -15,3 +15,17 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+.white-color {color: #ffffff !important}
+
+.nav>li>p {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+
+.navbar-nav>li>p {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  line-height: 20px;
+}

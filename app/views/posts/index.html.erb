@@ -1,15 +1,17 @@
-<h1>Listing posts</h1>
+<h1 class="text-right"><em>Listing posts</em></h1>
+
+<%= link_to 'New Post', new_post_path, :class => "white-color btn btn-success", :role => 'button' %>
 
 <div class="table-responsive">
 
-    <table class="table table-bordered">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>Title</th>
           <th>Body</th>
           <th>Tags</th>
           <th>Author</th>
-          <th colspan="4"></th>
+          <th>Actions</th>
         </tr>
       </thead>
 
@@ -20,16 +22,30 @@
             <td><%= post.body %></td>
             <td><%= post.tags %></td>
             <td><%= post.user ? post.user.name : '-' %></td>
-            <td><%= link_to 'Show', post_path(post) %></td>
-            <td><%= link_to 'Edit', edit_post_path(post) %></td>
-            <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td>
+              <ul class="list-inline">
+                <li><%= link_to 'Show',
+                                post_path(post),
+                                :class => 'white-color btn btn-info btn-sm',
+                                :role => 'button'
+                %></li>
+                <li><%= link_to 'Edit',
+                                edit_post_path(post),
+                                :class => 'white-color btn btn-warning btn-sm',
+                                :role => 'button'
+                %></li>
+                <li><%= link_to 'Destroy',
+                                post,
+                                method: :delete,
+                                data: { confirm: 'Are you sure?' },
+                                :class => 'white-color btn btn-danger btn-sm',
+                                :role => 'button'
+                %></li>
+              </ul>
+            </td>
           </tr>
         <% end %>
       </tbody>
     </table>
 
 </div>
-
-<br>
-
-<%= link_to 'New Post', new_post_path %>
