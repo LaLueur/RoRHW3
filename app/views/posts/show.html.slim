@@ -1,0 +1,17 @@
+div class="alert alert-warning" role="alert"
+  = notice
+p
+  strong Title:
+  = @post.title
+
+p
+  strong Body:
+  = @post.body
+
+p
+  strong Tags:
+  = @post.tags
+
+ul.list-inline
+  li = link_to 'Edit', edit_post_path(@post), :class => 'white-color btn btn-warning btn-sm',:role => 'button'
+  li = link_to 'Back', posts_path,:class => 'white-color btn btn-success btn-sm', :role => 'button'
