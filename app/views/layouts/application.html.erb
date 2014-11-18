@@ -10,9 +10,11 @@
 <body>
 
 
-<div id="show-alert" style="display: none;">
-  <%= cookies[:views].to_i.modulo(10) == 0 %>
-</div>
+<%if  cookies[:views].to_i.modulo(10) == 0 %>
+    <%= javascript_tag do %>
+        bootbox.alert("Learn with Geekhub!");
+    <% end %>
+<% end %>
 
  <nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
