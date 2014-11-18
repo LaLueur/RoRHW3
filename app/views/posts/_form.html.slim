@@ -13,7 +13,7 @@
     = f.text_area :body, :class => 'form-control', :placeholder => 'Body'
 
   div class="field"
-    = f.text_field :tags, :class => 'form-control', :placeholder => 'Tags'
+    =f.text_field :tags, :class => 'form-control', :placeholder => 'Tags', 'data-role'=>'tagsinput'
 
   div class="actions"
     = f.submit 'Submit', :class => 'btn btn-lg btn-primary btn-block'

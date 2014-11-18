@@ -17,7 +17,7 @@ div class="table-responsive"
         tr
           td = post.title
           td = post.body
-          td = post.tags #f.text_field :tag_list, 'data-role'=>'tagsinput'
+          td  '-' #post.tags #f.text_field :tag_list, 'data-role'=>'tagsinput'
           td = post.user ? post.user.name : '-'
           td
             ul.list-inline
