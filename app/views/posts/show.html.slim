@@ -10,7 +10,11 @@ p
 
 p
   strong Tags:
-  = @post.tags
+  div data-role="tagsinput"
+    - if @post.tags
+      -@post.tags.each do |tag|
+        button type="button" class="btn btn-info btn-xs" style="margin-right: 5px;"
+          =tag.name
 
 ul.list-inline
   li = link_to 'Edit', edit_post_path(@post), :class => 'white-color btn btn-warning btn-sm',:role => 'button'

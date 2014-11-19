@@ -5,4 +5,17 @@ class Post < ActiveRecord::Base
   validates :title, :presence => true, :uniqueness => true, :length => 5..100
   validates_presence_of :body
   validates_presence_of :user_id
+
+  def display_tags
+    tags = self.tags
+    return_value = ''
+    unless tags.empty?
+      last_index = tags.size - 1
+      tags.each_with_index { |tag, index|
+        return_value += tag.name
+        return_value += ',' unless index == last_index
+      }
+    end
+    return_value
+  end
 end

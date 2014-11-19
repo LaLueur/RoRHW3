@@ -17,10 +17,14 @@ div class="table-responsive"
         tr
           td = post.title
           td = post.body
-          td  '-' #post.tags #f.text_field :tag_list, 'data-role'=>'tagsinput'
+          td
+            - if post.tags
+              -post.tags.each do |tag|
+                button type="button" class="btn btn-info btn-xs" style="margin-right: 5px;"
+                  =tag.name
           td = post.user ? post.user.name : '-'
           td
             ul.list-inline
-              li = link_to 'Show', post_path(post),:class => 'white-color btn btn-info btn-sm',:role => 'button'
+              li = link_to 'Show', post_path(post),:class => 'white-color btn btn-primary btn-sm',:role => 'button'
               li = link_to 'Edit', edit_post_path(post),:class => 'white-color btn btn-warning btn-sm',:role => 'button'
               li = link_to 'Destroy',post,method: :delete, data: { confirm: 'Are you sure?' },:class => 'white-color btn btn-danger btn-sm',:role => 'button'
