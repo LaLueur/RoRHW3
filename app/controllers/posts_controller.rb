@@ -28,6 +28,8 @@ class PostsController < ApplicationController
   def new
     if current_user
       @post = Post.new
+      @action_path = posts_path
+      @method = :post
     else
       redirect_to sessions_login_path
     end
@@ -35,22 +37,30 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
-
+    @action_path = post_path @post
+    @method = :put
   end
 
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(post_params)
+    @post = Post.new
+    @post.title = params[:title]
+    @post.body = params[:body]
+    @post.user = current_user if current_user
+    @tags = params[:tags].split(',') unless params[:tags].blank?
 
     respond_to do |format|
-      @post.user = current_user if current_user
-      if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+
+      Post.transaction do
+        if @post.save
+          format.html { redirect_to @post, notice: 'Post was successfully created.' }
+          format.json { render :show, status: :created, location: @post }
+          create_tags(@post, @tags)
+        else
+          format.html { render :new }
+          format.json { render json: @post.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -59,9 +69,13 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-      if @post.update(post_params)
+      @post.title = params[:title]
+      @post.body = params[:body]
+      @tags = params[:tags].split(',') unless params[:tags].blank?
+      if @post.save
         format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
         format.json { render :show, status: :ok, location: @post }
+        create_tags(@post, @tags)
       else
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -87,13 +101,36 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:title, :body, :tags)
+    params.require(:post).permit(:title, :body)
   end
 
   def check_auth
     if current_user != @post.user
       flash[:notice] = "Sorry, you can not update, edit or delete this post. If it is yours just login please."
       redirect_to post_path
+    end
+  end
+
+  def create_tags(post, tags)
+    unless tags.blank?
+      tags.each { |tag_val|
+        tag = Tag.find_by_name tag_val
+        if tag.blank?
+          tag = Tag.new()
+          tag.name = tag_val
+        end
+        create_post_tag(post, tag) if tag.save
+      }
+    end
+  end
+
+  def create_post_tag(post, tag)
+    post_tag = PostTag.find_by_post_id_and_tag_id(post.id, tag.id)
+    if post_tag.blank?
+      post_tag = PostTag.new
+      post_tag.post = post
+      post_tag.tag = tag
+      post_tag.save
     end
   end
 

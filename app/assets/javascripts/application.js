@@ -15,6 +15,8 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery.turbolinks
+//= require bootstrap-tagsinput
 //= require_tree ../../../vendor/assets/javascripts/.
 
 

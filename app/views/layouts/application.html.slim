@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title RoRHW3
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+
+    = csrf_meta_tags
+  body
+    - if  cookies[:views].to_i.modulo(10) == 0
+      javascript:
+        bootbox.alert("Learn with Geekhub!");
+    nav.navbar.navbar-default.navbar-static-top role = "navigation"
+      .container
+        #navbar.navbar-collapse.collapse
+          = link_to image_tag('ror.png', width: 75), root_path
+          ul.nav.navbar-nav.navbar-right
+            - if current_user
+              li
+                p Welcome, #{current_user.name}
+              li = link_to 'Logout', sessions_logout_path
+            - else
+              li = link_to 'Register', registration_path
+              li = link_to 'Login', sessions_login_path
+
+  = yield
+

@@ -1,0 +1,20 @@
+= form_tag("#{@action_path}", method: @method, :class => 'form-signin', :role => "form") do
+  h2.form-signin-heading Fill in form please
+  - if @post.errors.any?
+    #error_explanation
+      - @post.errors.full_messages.each do |message|
+        div class="alert alert-danger" role="alert"
+          = message
+
+  div class="field"
+    = text_field_tag :title, @post.title, {:class => "form-control", :placeholder => 'Title'}
+
+  div class="field"
+    = text_area_tag :body, @post.body, {:class => "form-control", :placeholder => 'Body'}
+
+  div#tags-input class="field"
+    = text_field_tag :tags, @post.display_tags, {:class => "form-control", :placeholder => 'Tags', 'data-role'=>'tagsinput'}
+
+  div class="actions"
+    = submit_tag 'Submit', :class => 'btn btn-lg btn-primary btn-block'
+
