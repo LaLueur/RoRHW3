@@ -19,3 +19,7 @@ p
 ul.list-inline
   li = link_to 'Edit', edit_post_path(@post), :class => 'white-color btn btn-warning btn-sm',:role => 'button'
   li = link_to 'Back', posts_path,:class => 'white-color btn btn-success btn-sm', :role => 'button'
+
+h2 Comments
+= render "comments/comments"
+= render "comments/form"

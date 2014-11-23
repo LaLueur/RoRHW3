@@ -18,6 +18,7 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
     #@post = Post.find(params[:id])
+    @comment = Comment.new
     respond_to do |format|
       format.html
       format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}
@@ -134,4 +135,7 @@ class PostsController < ApplicationController
     end
   end
 
+  def update_tags(post,tags)
+
+  end
 end

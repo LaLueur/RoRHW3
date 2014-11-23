@@ -7,14 +7,16 @@ div class="table-responsive"
   table.table.table-hover
     thead
       tr
-        th Title
-        th Body
-        th Tags
-        th Author
-        th Actions
+        th class="col-md-1" Avatar
+        th class="col-md-3" Title
+        th class="col-md-4" Body
+        th class="col-md-2" Tags
+        th class="col-md-1" Author
+        th class="col-md-4" Actions
     tbody
       - @posts.each do |post|
         tr
+          td = image_tag avatar_url(post.user), size: "48"
           td = post.title
           td = post.body
           td
