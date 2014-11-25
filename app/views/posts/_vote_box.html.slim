@@ -1,0 +1,4 @@
+div = link_to(image_tag('arrow_up.png'), votes_path(:score => '1', :id => @post.id), :class => 'vote-link-up', :method => :post)
+div#post-total-score
+  = @post.total_score
+div= link_to(image_tag('arrow_down.png'), votes_path(:score => '-1', :id => @post.id), :class => 'vote-link-down', :method => :post)
