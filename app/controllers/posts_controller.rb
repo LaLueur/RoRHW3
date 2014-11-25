@@ -61,9 +61,9 @@ class PostsController < ApplicationController
 
       Post.transaction do
         if @post.save
+          create_tags(@post, @tags)
           format.html { redirect_to @post, notice: 'Post was successfully created.' }
           format.json { render :show, status: :created, location: @post }
-          create_tags(@post, @tags)
         else
           format.html { render :new }
           format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -79,13 +79,18 @@ class PostsController < ApplicationController
       @post.title = params[:title]
       @post.body = params[:body]
       @tags = params[:tags].split(',') unless params[:tags].blank?
-      if @post.save
-        format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
-        create_tags(@post, @tags)
-      else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+      Post.transaction do
+        if @post.save
+          destroy_tags(@post, @tags)
+          create_tags(@post, @tags)
+          format.html { redirect_to posts_path, notice: 'Post was successfully updated.' }
+          format.json { render :show, status: :ok, location: @post }
+        else
+          @action_path = post_path @post
+          @method = :put
+          format.html { render :edit }
+          format.json { render json: @post.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -114,7 +119,6 @@ class PostsController < ApplicationController
         end
       else
         @vote = @post.votes.build(:user => current_user , :score => params[:score])
-        #@vote = Vote.new(:user_id => current_user.id, :post_id => @post.id, :score => params[:score])
         if @vote.save
           message = 'Your vote is counted.'
         else
@@ -150,6 +154,16 @@ class PostsController < ApplicationController
     end
   end
 
+  def destroy_tags(post, tags_val)
+    tags = post.tags
+    unless tags.blank?
+      tags.each { |tag|
+        post_tag = PostTag.find_by_post_id_and_tag_id(post.id, tag.id)
+        post_tag.destroy unless tags_val.include? tag.name
+      }
+    end
+  end
+
   def create_tags(post, tags)
     unless tags.blank?
       tags.each { |tag_val|
@@ -173,7 +187,4 @@ class PostsController < ApplicationController
     end
   end
 
-  def update_tags(post,tags)
-
-  end
 end
