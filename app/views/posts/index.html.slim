@@ -17,12 +17,12 @@ div.table-responsive
         th class="col-md-4" Body
         th class="col-md-2" Tags
         th class="col-md-1" Author
-        th class="col-md-4" Actions
+        th class="col-md-1" Actions
     tbody
       - @posts.each do |post|
         tr
-          td = image_tag avatar_url(post.user), size: "48"
-          td = post.title
+          td = image_tag avatar_url(post.user), size: '48'
+          td = link_to post.title, post_path(post)
           td = post.body
           td
             - if post.tags
@@ -32,6 +32,5 @@ div.table-responsive
           td = post.user ? post.user.name : '-'
           td
             ul.list-inline
-              li = link_to 'Show', post_path(post),:class => 'white-color btn btn-primary btn-sm',:role => 'button'
-              li = link_to 'Edit', edit_post_path(post),:class => 'white-color btn btn-warning btn-sm',:role => 'button'
+              li = link_to 'Edit', edit_post_path(post),:class => 'white-color btn btn-warning btn-sm',:role => 'button', :style => 'margin-bottom: 10px; margin-top: 5px;'
               li = link_to 'Destroy',post,method: :delete, data: { confirm: 'Are you sure?' },:class => 'white-color btn btn-danger btn-sm',:role => 'button'
