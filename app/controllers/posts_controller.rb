@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy, :vote]
   before_action :check_auth, only: [:edit, :update, :destroy]
 
 
@@ -93,6 +93,32 @@ class PostsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def vote
+    @vote = @post.votes.find_by_user_id(current_user.id)
+    message = 'Error'
+    if @vote
+      if @vote.score.to_s == params[:score]
+        message = 'Score is the same.'
+      else
+        @vote.update_attributes(:score => params[:score])
+        message = 'Score is updated'
+      end
+    else
+      @vote = @post.votes.build(:user => current_user , :score => params[:score])
+      #@vote = Vote.new(:user_id => current_user.id, :post_id => @post.id, :score => params[:score])
+      if @vote.save
+        message = 'Your vote is saved.'
+      else
+        message = 'Unsaved.'
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to @post, notice: message }
+      format.json { head :no_content }
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

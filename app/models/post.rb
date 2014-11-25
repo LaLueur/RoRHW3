@@ -1,7 +1,10 @@
 class Post < ActiveRecord::Base
+#TODO create new field with total score (votes) in post model :vote_all:integer
   belongs_to :user
   has_many :post_tags
   has_many :comments
+  #has_many :votes, :as => :voteable
+  has_many :votes
   has_many :tags, :through => :post_tags
   validates :title, :presence => true, :uniqueness => true, :length => 5..140
   validates :body, :presence => true, :length => {minimum: 140}
