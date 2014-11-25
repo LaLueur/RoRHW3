@@ -19,6 +19,7 @@ class Vote < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => :post_id
 
   after_save :update_post_total_score
+  before_destroy :update_post_total_score
 
   def update_post_total_score
     post = self.post
@@ -26,10 +27,5 @@ class Vote < ActiveRecord::Base
     new_total_score += self.score
     post.update_attribute(:total_score, new_total_score)
   end
-
-  # def update_post_total_score
-  #   self.post.total_score += self.score
-  #   self.post.save
-  # end
 
 end

@@ -7,7 +7,13 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    if params[:sort_by] == 'active'
+      @posts = Post.active
+    elsif params[:sort_by] == 'popular'
+      @posts = Post.popular
+    else
+      @posts = Post.all
+    end
     respond_to do |format|
       format.html
       format.json { render json: @posts, except: :updated_at, :include => {:user => {:only => [:name]}}}
@@ -95,24 +101,30 @@ class PostsController < ApplicationController
   end
 
   def vote
-    @vote = @post.votes.find_by_user_id(current_user.id)
     message = 'Error'
-    if @vote
-      if @vote.score.to_s == params[:score]
-        message = 'Score is the same.'
+    if current_user
+      @vote = @post.votes.find_by_user_id(current_user.id)
+      if @vote
+        if @vote.score.to_s == params[:score]
+          message = "You can't vote twice."
+        else
+          @vote.score = params[:score]
+          @vote.destroy
+          message = 'Your vote is reverted.'
+        end
       else
-        @vote.update_attributes(:score => params[:score])
-        message = 'Score is updated'
+        @vote = @post.votes.build(:user => current_user , :score => params[:score])
+        #@vote = Vote.new(:user_id => current_user.id, :post_id => @post.id, :score => params[:score])
+        if @vote.save
+          message = 'Your vote is counted.'
+        else
+          message = 'Unsaved.'
+        end
       end
     else
-      @vote = @post.votes.build(:user => current_user , :score => params[:score])
-      #@vote = Vote.new(:user_id => current_user.id, :post_id => @post.id, :score => params[:score])
-      if @vote.save
-        message = 'Your vote is saved.'
-      else
-        message = 'Unsaved.'
-      end
+      message = 'Please login first!'
     end
+
     respond_to do |format|
       format.html { redirect_to @post, notice: message }
       format.json { head :no_content }

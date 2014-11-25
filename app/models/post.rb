@@ -9,9 +9,9 @@ class Post < ActiveRecord::Base
   validates :title, :presence => true, :uniqueness => true, :length => 5..140
   validates :body, :presence => true, :length => {minimum: 140}
   validates_presence_of :user_id
-  scope :newest, -> { order (:created_at) }
-  scope :updated, -> { order (:updated_at) }
-  scope :voted, -> {order (:total_score)}
+  scope :newest, -> { order ('created_at desc') }
+  scope :active, -> { order ('updated_at desc') }
+  scope :popular, -> { order ('total_score desc') }
 
   def display_tags
     tags = self.tags
