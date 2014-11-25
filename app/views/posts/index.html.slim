@@ -27,7 +27,7 @@ div.table-responsive
           td
             - if post.tags
               -post.tags.each do |tag|
-                button type="button" class="btn btn-info btn-xs" style="margin-right: 5px;"
+                button type="button" class="btn btn-info btn-xs" style="margin-right: 5px; margin-bottom: 5px;"
                   =tag.name
           td = post.user ? post.user.name : '-'
           td
