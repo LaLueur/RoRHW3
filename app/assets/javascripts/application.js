@@ -19,4 +19,21 @@
 //= require bootstrap-tagsinput
 //= require_tree ../../../vendor/assets/javascripts/.
 
+$(function() {
+    return $(".vote-link-up, .vote-link-down").on("ajax:complete", function(e, data, status, xhr) {
+        var response = jQuery.parseJSON(data.responseText);
+        processVote(response.message, response.total_score);
+    });
+});
+
+
+function processVote(message, totalScore){
+    var totalScoreContainer = $('#post-total-score');
+    var alertContainer = $("#post-alert");
+
+    totalScoreContainer.text(totalScore);
+
+    //ToDo: implement fancy alerts e.g. http://pjdietz.com/jquery-plugins/freeow/
+    alertContainer.text(message);
+}
 

@@ -1,26 +1,31 @@
-div class="alert alert-warning" role="alert"
+div#post-alert class="alert alert-warning" role="alert"
   = notice
-p
-  strong Title:
-  = @post.title
 
-p
-  strong Body:
-  = @post.body
+ul.list-inline align = "right"
+  li = link_to 'Edit', edit_post_path(@post), :class => 'white-color btn btn-warning btn-sm', :role => 'button'
+  li = link_to 'Back', posts_path, :class => 'white-color btn btn-success btn-sm', :role => 'button'
 
-p
-  strong Tags:
-  div data-role="tagsinput"
-    - if @post.tags
-      -@post.tags.each do |tag|
-        button type="button" class="btn btn-info btn-xs" style="margin-right: 5px;"
-          =tag.name
+div class = "post-title" align = "center"
+  h1 = @post.title
+  p by
+  p = @post.user.name
 
-ul.list-inline
-  li = link_to 'Edit', edit_post_path(@post), :class => 'white-color btn btn-warning btn-sm',:role => 'button'
-  li = link_to 'Back', posts_path,:class => 'white-color btn btn-success btn-sm', :role => 'button'
+main
+  section id="with-container-fluid"
+    div class="container-fluid"
+      = @post.body
 
-h2 Comments
+  p
+    div data-role="tagsinput"
+      - if @post.tags
+        -@post.tags.each do |tag|
+          button type="button" class="btn btn-info btn-xs" style="margin-right: 5px;"
+            =tag.name
+
+div align = "right"
+  = render "vote_box"
+
+h4 Comments
 = render "comments/comments"
-= render "comments/form"
-=render "vote_box"
+div align = "center"
+  = render "comments/form"

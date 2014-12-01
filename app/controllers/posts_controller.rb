@@ -131,6 +131,7 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to @post, notice: message }
+      format.js {render json: {message: message, total_score: @post.total_score}.to_json }
       format.json { head :no_content }
     end
   end
