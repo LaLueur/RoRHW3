@@ -37,3 +37,14 @@ function processVote(message, totalScore){
     alertContainer.text(message);
 }
 
+
+$(function() {
+    return $("#new_comment").on("ajax:complete", function(e, data, status, xhr) {
+        if (status == 'success') {
+            var comment = data.responseText;
+            var commentsContainer = $('#comments');
+            commentsContainer.append(comment);
+        }
+        $('#comment_content').val('');
+    });
+});

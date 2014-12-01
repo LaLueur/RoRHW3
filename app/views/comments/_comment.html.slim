@@ -1,0 +1,4 @@
+div class="comment"
+= simple_format comment.content
+= link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), method: :delete
+

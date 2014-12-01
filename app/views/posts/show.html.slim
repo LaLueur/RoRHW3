@@ -26,6 +26,8 @@ div align = "right"
   = render "vote_box"
 
 h4 Comments
-= render "comments/comments"
+div id="comments"
+  - @post.comments.each do |comment|
+    = render partial: "comments/comment", locals: {comment: comment}
 div align = "center"
   = render "comments/form"

@@ -12,10 +12,15 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.user = current_user if current_user
     if @comment.save
-      redirect_to post_path(@comment.post), notice: "Comment created."
+      render partial: "comments/comment", locals: {comment: @comment}
     else
-      render :new
+      render :new, status: 403
     end
+  end
+
+  def destroy
+    @post = Post.find(params[:post_id])
+    redirect_to @post
   end
 
 
