@@ -25,7 +25,7 @@ class Vote < ActiveRecord::Base
     post = self.post
     new_total_score = post.total_score
     new_total_score += self.score
-    post.update_attribute(:total_score, new_total_score)
+    post.update_attributes(total_score: new_total_score)
   end
 
 end
