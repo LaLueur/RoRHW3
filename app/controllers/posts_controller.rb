@@ -16,7 +16,8 @@ class PostsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @posts, except: :updated_at, :include => {:user => {:only => [:name]}}}
+      #format.json { render json: @posts, except: :updated_at, :include => {:user => {:only => [:name]}}}
+      format.json { render json: @posts, except: :updated_at, include: {user: {only: name}}}
     end
   end
 
@@ -27,7 +28,8 @@ class PostsController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html
-      format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}
+      #format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}
+      format.json { render json: @post, except: :updated_at, include: {user: {only: name}}}
     end
   end
 
@@ -111,14 +113,14 @@ class PostsController < ApplicationController
       @vote = @post.votes.find_by_user_id(current_user.id)
       if @vote
         if @vote.score.to_s == params[:score]
-          message = "You can't vote twice."
+          message = 'You can not vote twice.'
         else
           @vote.score = params[:score]
           @vote.destroy
           message = 'Your vote is reverted.'
         end
       else
-        @vote = @post.votes.build(:user => current_user , :score => params[:score])
+        @vote = @post.votes.build(user: current_user , score: params[:score])
         if @vote.save
           message = 'Your vote is counted.'
         else

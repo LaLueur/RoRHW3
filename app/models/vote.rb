@@ -16,7 +16,7 @@ class Vote < ActiveRecord::Base
   validates_presence_of :score , :post, :user
   validates_inclusion_of :score, :in => VOTE_RANGE
   #ToDo: check voter & voteable ids
-  validates_uniqueness_of :user_id, :scope => :post_id
+  validates_uniqueness_of :user_id, scope: :post_id
 
   after_save :update_post_total_score
   before_destroy :update_post_total_score

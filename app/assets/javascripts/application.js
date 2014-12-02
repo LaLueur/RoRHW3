@@ -20,7 +20,7 @@
 //= require_tree ../../../vendor/assets/javascripts/.
 
 $(function() {
-    return $(".vote-link-up, .vote-link-down").on("ajax:complete", function(e, data, status, xhr) {
+    return $('.vote-link-up, .vote-link-down').on('ajax:complete', function(e, data, status, xhr) {
         var response = jQuery.parseJSON(data.responseText);
         processVote(response.message, response.total_score);
     });
@@ -29,7 +29,7 @@ $(function() {
 
 function processVote(message, totalScore){
     var totalScoreContainer = $('#post-total-score');
-    var alertContainer = $("#post-alert");
+    var alertContainer = $('#post-alert');
 
     totalScoreContainer.text(totalScore);
 
@@ -39,7 +39,7 @@ function processVote(message, totalScore){
 
 
 $(function() {
-    return $("#new_comment").on("ajax:complete", function(e, data, status, xhr) {
+    return $('#new_comment').on('ajax:complete', function(e, data, status, xhr) {
         if (status == 'success') {
             var comment = data.responseText;
             var commentsContainer = $('#comments');
@@ -48,3 +48,10 @@ $(function() {
         $('#comment_content').val('');
     });
 });
+
+//$(function() {
+//   return $('#delete_comment_link').on('ajax:complete', function (e, data, status, xhr) {
+//        var message = data.responseText;
+//        alert(message);
+//   });
+//});
