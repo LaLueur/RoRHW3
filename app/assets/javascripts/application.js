@@ -44,14 +44,24 @@ $(function() {
             var comment = data.responseText;
             var commentsContainer = $('#comments');
             commentsContainer.append(comment);
+            addDeleteEvent ($('.delete_comment_link').last());
         }
         $('#comment_content').val('');
     });
 });
 
-//$(function() {
-//   return $('#delete_comment_link').on('ajax:complete', function (e, data, status, xhr) {
-//        var message = data.responseText;
-//        alert(message);
-//   });
-//});
+$(function(){
+    addDeleteEvent ($('.delete_comment_link'));
+});
+
+function addDeleteEvent (elements) {
+   return elements.on('ajax:complete', function (e, data, status, xhr) {
+       var response = jQuery.parseJSON(data.responseText);
+
+       if (response.comment_deleted) {
+           $(response.comment_container_id).remove();
+       }
+
+       alert(response.message);
+   });
+};

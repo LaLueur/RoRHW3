@@ -26,6 +26,7 @@ class PostsController < ApplicationController
   def show
     #@post = Post.find(params[:id])
     @comment = Comment.new
+    @comment_container_id_prefix = CommentsController::COMMENT_CONTAINER_ID_PREFIX
     respond_to do |format|
       format.html
       #format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}

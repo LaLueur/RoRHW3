@@ -1,4 +1,7 @@
 class CommentsController < ApplicationController
+
+  COMMENT_CONTAINER_ID_PREFIX = 'comment-id-'
+
 #ToDo only logged in users should have the right to leave comments
   def index
     @comments = Comment.all
@@ -11,6 +14,7 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     @comment.user = current_user if current_user
+    @comment_container_id_prefix = COMMENT_CONTAINER_ID_PREFIX
     if @comment.save
       render partial: 'comments/comment', locals: {comment: @comment}
     else
@@ -21,15 +25,20 @@ class CommentsController < ApplicationController
   def destroy
     @post = Post.find(params[:post_id])
     @comment = @post.comments.find(params[:id])
-    if current_user != @comment.user
-      message = 'Sorry, you can not delete this comment. If it is yours just login please.'
-    else
-      @comment.destroy
-      message = 'Your comment is deleted.'
+    comment_container_id = '#' + COMMENT_CONTAINER_ID_PREFIX + @comment.id.to_s
+    comment_deleted = false
+    message = 'Sorry, you can not delete this comment. If it is yours just login please.'
+    unless current_user != @comment.user
+      if @comment.destroy
+        message = 'Your comment is deleted.'
+        comment_deleted = true
+      end
     end
     respond_to do |format|
       format.html { redirect_to @post, notice: message }
-      format.js {render json: {message: message, total_score: @post.total_score}.to_json }
+      format.js {render json: {message: message,
+                               comment_container_id: comment_container_id,
+                               comment_deleted: comment_deleted}.to_json }
       format.json { head :no_content }
     end
   end

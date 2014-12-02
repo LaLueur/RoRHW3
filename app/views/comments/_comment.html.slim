@@ -1,11 +1,10 @@
-div class="comment"
-  div.comment
-    div.row
-      div.col-sm-9
-        = comment.user.name
-        div.row
-          div.col-xs-8.col-sm-12
-            = comment.content
-          div.col-sm-1 style = "float: right"
-            = link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), id: 'delete_comment_link', remote:true, method: :delete
+div.comment id="#{@comment_container_id_prefix + comment.id.to_s}"
+  div.row
+    div.col-sm-9
+      = comment.user.name
+      div.row
+        div.col-xs-8.col-sm-12
+          = comment.content
+        div.col-sm-1 style = "float: right"
+          = link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), class: 'delete_comment_link', remote:true, method: :delete
 
