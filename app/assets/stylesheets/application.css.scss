@@ -32,8 +32,21 @@
   line-height: 20px;
 }
 
+.container-fluid{
+  margin:25px  25px;
+}
+
+.div.username {horiz-align: center}
 .vote-link-up {background-color: green}
 .vote-link-down {background-color: red}
 
 .rating {width : 40px}
 div.form-comments {width : 200px}
+
+
+.post-body {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
