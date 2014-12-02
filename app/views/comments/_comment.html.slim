@@ -1,7 +1,10 @@
 div.comment id="#{@comment_container_id_prefix + comment.id.to_s}"
   div.row
     div.col-sm-9
+      = image_tag avatar_url(comment.user), size: '48'
       = comment.user.name
+      span style="float: right"
+        = comment.created_at
       div.row
         div.col-xs-8.col-sm-12
           = comment.content
