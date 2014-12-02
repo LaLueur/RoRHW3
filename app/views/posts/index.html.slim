@@ -8,29 +8,36 @@ div.btn-group
       li = link_to 'Active', posts_path(:sort_by => 'active')
       li = link_to 'Popular', posts_path(:sort_by => 'popular')
 
-div.table-responsive
-  table.table.table-hover
-    thead
-      tr
-        th class="col-md-1" Avatar
-        th class="col-md-3" Title
-        th class="col-md-4" Body
-        th class="col-md-2" Tags
-        th class="col-md-1" Author
-        th class="col-md-1" Actions
-    tbody
-      - @posts.each do |post|
-        tr
-          td = image_tag avatar_url(post.user), size: '48'
-          td = link_to post.title, post_path(post)
-          td = post.body
-          td
-            - if post.tags
-              -post.tags.each do |tag|
-                button type="button" class="btn btn-info btn-xs" style="margin-right: 5px; margin-bottom: 5px;"
-                  =tag.name
-          td = post.user ? post.user.name : '-'
-          td
-            ul.list-inline
-              li = link_to 'Edit', edit_post_path(post),:class => 'white-color btn btn-warning btn-sm',:role => 'button', :style => 'margin-bottom: 10px; margin-top: 5px;'
-              li = link_to 'Destroy',post,method: :delete, data: { confirm: 'Are you sure?' },:class => 'white-color btn btn-danger btn-sm',:role => 'button'
+div.container-fluid
+  div.table-responsive
+    table.table.table-hover
+      tbody
+        - @posts.each do |post|
+          tr
+            td
+              div.votes.col-md-1
+                = post.total_score
+                div.row
+                  div votes
+            td
+              div.post_title.col-md-8
+                = link_to post.title, post_path(post)
+                div.row align = "right"
+                  div.post_tags
+                    - if post.tags
+                      -post.tags.each do |tag|
+                        button type="button" class="btn btn-info btn-xs" style="margin-right: 5px; margin-bottom: 5px;"
+                          =tag.name
+            td
+              div.author_information.col-md-2 align = "center"
+                = image_tag avatar_url(post.user), size: '48'
+                div.row
+                  div.username
+                    = post.user ? post.user.name : '-'
+            td
+              div.control_buttons.col-md-1 align = "right"
+                = link_to 'Edit', edit_post_path(post),:class => 'white-color btn btn-warning btn-sm',:role => 'button', :style => 'margin-bottom: 10px; margin-top: 5px;'
+                div.row
+                  = link_to 'Destroy',post,method: :delete, data: { confirm: 'Are you sure?' },:class => 'white-color btn btn-danger btn-sm',:role => 'button'
+
+
