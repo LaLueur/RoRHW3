@@ -110,7 +110,8 @@ class PostsController < ApplicationController
 
   def vote
     message = 'Error'
-    if current_user
+
+    if current_user and current_user != @post.user
       @vote = @post.votes.find_by_user_id(current_user.id)
       if @vote
         if @vote.score.to_s == params[:score]
@@ -128,8 +129,11 @@ class PostsController < ApplicationController
           message = 'Unsaved.'
         end
       end
-    else
-      message = 'Please login first!'
+    else if current_user and current_user == @post.user
+           message = 'You can not vote for your own posts!'
+         else
+           message = 'Please login first!'
+         end
     end
 
     respond_to do |format|
