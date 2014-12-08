@@ -27,7 +27,7 @@ $(function() {
 });
 
 
-function processVote(message, totalScore){
+function processVote(message, totalScore) {
     var totalScoreContainer = $('#post-total-score');
     var alertContainer = $('#post-alert');
 
@@ -38,21 +38,24 @@ function processVote(message, totalScore){
 }
 
 
-$(function() {
-    return $('#new_comment').on('ajax:complete', function(e, data, status, xhr) {
+$(function(){
+    addDeleteEvent ($('.delete_comment_link'));
+    addCommentEvent ($('.comment-post'));
+
+});
+
+function submitCommentEvent(element) {
+    return element.on('ajax:complete', function(e, data, status, xhr) {
         if (status == 'success') {
             var comment = data.responseText;
             var commentsContainer = $('#comments');
             commentsContainer.append(comment);
             addDeleteEvent ($('.delete_comment_link').last());
+            //addCommentEvent ($('.comment-post').last());
         }
-        $('#comment_content').val('');
+        $('#new-comment-form').html('');
     });
-});
-
-$(function(){
-    addDeleteEvent ($('.delete_comment_link'));
-});
+}
 
 function addDeleteEvent (elements) {
    return elements.on('ajax:complete', function (e, data, status, xhr) {
@@ -64,4 +67,14 @@ function addDeleteEvent (elements) {
 
        alert(response.message);
    });
+};
+
+function addCommentEvent (elements) {
+    return elements.on('ajax:complete', function (e, data, status, xhr) {
+        var container = $('#new-comment-form');
+        var commentForm = data.responseText;
+
+        container.append(commentForm);
+        submitCommentEvent($('#new_comment'));
+    });
 };

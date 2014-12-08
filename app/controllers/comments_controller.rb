@@ -2,13 +2,14 @@ class CommentsController < ApplicationController
 
   COMMENT_CONTAINER_ID_PREFIX = 'comment-id-'
 
-#ToDo only logged in users should have the right to leave comments
   def index
     @comments = Comment.all
   end
 
   def new
+    @post = Post.find(params[:post_id])
     @comment = Comment.new
+    render partial: 'comments/form'
   end
 
   def create

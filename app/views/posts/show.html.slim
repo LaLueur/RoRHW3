@@ -25,9 +25,11 @@ main
 div align = "right"
   = render "vote_box"
 
+
+
 h4 Comments
+= link_to 'Comment', new_post_comment_path(@post), remote: true, class: 'comment-post'
 div id="comments"
   - @post.comments.each do |comment|
     = render partial: "comments/comment", locals: {comment: comment}
-div align = "center"
-  = render "comments/form"
+div#new-comment-form align = "center"

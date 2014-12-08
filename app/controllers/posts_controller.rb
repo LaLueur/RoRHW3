@@ -16,7 +16,6 @@ class PostsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      #format.json { render json: @posts, except: :updated_at, :include => {:user => {:only => [:name]}}}
       format.json { render json: @posts, except: :updated_at, include: {user: {only: name}}}
     end
   end
@@ -24,12 +23,9 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    #@post = Post.find(params[:id])
-    @comment = Comment.new
     @comment_container_id_prefix = CommentsController::COMMENT_CONTAINER_ID_PREFIX
     respond_to do |format|
       format.html
-      #format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}
       format.json { render json: @post, except: :updated_at, include: {user: {only: name}}}
     end
   end
