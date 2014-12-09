@@ -47,11 +47,20 @@ $(function(){
 function submitCommentEvent(element) {
     return element.on('ajax:complete', function(e, data, status, xhr) {
         if (status == 'success') {
-            var comment = data.responseText;
-            var commentsContainer = $('#comments');
-            commentsContainer.append(comment);
-            addDeleteEvent ($('.delete_comment_link').last());
-            //addCommentEvent ($('.comment-post').last());
+            var comment = $(data.responseText);
+            var parentElementId = element.find('#comment_parent_id').val();
+            if (parentElementId){
+                var parentCommentContainerId = '#comment-id-' + parentElementId;
+                var parentComment = $(parentCommentContainerId);
+                parentComment.after(comment);
+            } else {
+                var commentsContainerId = '#comments';
+                var commentsContainer = $(commentsContainerId);
+                commentsContainer.append(comment);
+            }
+
+            addDeleteEvent (comment.find('.delete_comment_link'));
+            addCommentEvent (comment.find('.comment-post'));
         }
         $('#new-comment-form').html('');
     });
@@ -72,9 +81,12 @@ function addDeleteEvent (elements) {
 function addCommentEvent (elements) {
     return elements.on('ajax:complete', function (e, data, status, xhr) {
         var container = $('#new-comment-form');
-        var commentForm = data.responseText;
+        var commentForm = $(data.responseText);
 
         container.append(commentForm);
+        $('html, body').animate({
+            scrollTop: (commentForm.offset().top)
+        },500);
         submitCommentEvent($('#new_comment'));
     });
 };

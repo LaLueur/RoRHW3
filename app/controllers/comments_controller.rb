@@ -9,6 +9,7 @@ class CommentsController < ApplicationController
   def new
     @post = Post.find(params[:post_id])
     @comment = Comment.new
+    @comment.parent_id = params[:parent_id]
     render partial: 'comments/form'
   end
 
@@ -48,6 +49,6 @@ class CommentsController < ApplicationController
   private
 
   def comment_params
-    params.require(:comment).permit(:content, :post_id)
+    params.require(:comment).permit(:content, :post_id, :parent_id)
   end
 end

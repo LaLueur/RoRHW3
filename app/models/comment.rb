@@ -1,7 +1,8 @@
 class Comment < ActiveRecord::Base
+  has_ancestry
   belongs_to :post
   belongs_to :user
-  #validates_presence_of :user
+
 
   validate do |comment|
     comment.errors.add(:base, 'Please login first in order to comment.') if comment.user.blank?

@@ -10,6 +10,6 @@
     = f.text_area :content, rows: 8
   div style="display:none"
     = f.text_area :post_id, :value => @post.id
-
+    = f.hidden_field :parent_id
   div class="actions form-comments"
     = f.submit
