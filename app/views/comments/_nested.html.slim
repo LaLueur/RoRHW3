@@ -1,0 +1,19 @@
+- comments.each do |comment, children|
+  div.nested
+    div.comment id="#{@comment_container_id_prefix + comment.id.to_s}"
+      div.row
+        div.col-sm-9
+          = image_tag avatar_url(comment.user), size: '48'
+          = comment.user.name
+          span style="float: right"
+            = comment.created_at.strftime("%B %d, %Y")
+          div.row
+            div.col-xs-8.col-sm-12
+              = comment.content
+            div.col-sm-1 style = "float: right"
+              div
+                = link_to 'Reply', new_post_comment_path(comment.post, :parent_id => comment), remote: true, class: 'comment-post'
+              = link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), class: 'delete_comment_link', remote:true, method: :delete, data: { confirm: 'Are you sure?' }
+
+    - if children.present?
+      = render partial: "comments/nested",  locals: {comments: children}

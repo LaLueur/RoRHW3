@@ -1,21 +1,22 @@
 #comments {
   font-size: 12px;
-  background-color: #EEE;
   padding: 0 20px;
   width: 100%;
-  border: solid 1px #777;
 }
 
 .comment {
-  border-bottom: solid 1px #999;
+  border: solid 1px #999;
   padding: 0 20px;
-  margin: 15px 0;
-  &:last-child {
-    border-bottom: none;
-  }
+  margin: 15px 0 15px -30px;
+  width: 450px;
+  background-color: #EEE;
 }
 
 #comment_content {
   margin-top: 15px;
   width : 375px;
+}
+
+.nested{
+  margin-left: 30px;
 }

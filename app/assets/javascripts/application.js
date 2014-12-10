@@ -71,7 +71,7 @@ function addDeleteEvent (elements) {
        var response = jQuery.parseJSON(data.responseText);
 
        if (response.comment_deleted) {
-           $(response.comment_container_id).remove();
+           $(response.comment_container_id).parent('.nested').remove();
        }
 
        alert(response.message);

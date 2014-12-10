@@ -30,6 +30,6 @@ div align = "right"
 h4 Comments
 = link_to 'Comment', new_post_comment_path(@post), remote: true, class: 'comment-post'
 div id="comments"
-  - @post.comments.each do |comment|
+  - @post.comments.roots.each do |comment|
     = render partial: "comments/comment", locals: {comment: comment}
 div#new-comment-form align = "center"
