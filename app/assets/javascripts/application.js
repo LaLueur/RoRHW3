@@ -52,7 +52,10 @@ function submitCommentEvent(element) {
             if (parentElementId){
                 var parentCommentContainerId = '#comment-id-' + parentElementId;
                 var parentComment = $(parentCommentContainerId);
-                parentComment.after(comment);
+                if (parentComment.siblings('.nested').length > 0)
+                    parentComment.siblings('.nested').last().after(comment);
+                else
+                    parentComment.after(comment);
             } else {
                 var commentsContainerId = '#comments';
                 var commentsContainer = $(commentsContainerId);
