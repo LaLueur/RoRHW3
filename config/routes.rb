@@ -80,9 +80,11 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   resources :posts do
-    resources :comments
+    resources :comments do
+      post :vote
+    end
+    post :vote
   end
 
-  post 'votes' => 'posts#vote'
-
 end
+

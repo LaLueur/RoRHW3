@@ -1,5 +1,7 @@
 class Post < ActiveRecord::Base
 #TODO create new field with total score (votes) in post model :vote_all:integer
+
+  include VoteModule
   belongs_to :user
   has_many :post_tags, dependent: :destroy
   has_many :comments, dependent: :destroy

@@ -9,10 +9,11 @@ div.nested
         div.row
           div.col-xs-8.col-sm-12
             = comment.content
+            div align = "left"
+              = render partial: 'comments/vote_box', locals: {comment: comment}
           div.col-sm-1 style = "float: right"
             div
               = link_to 'Reply', new_post_comment_path(comment.post, :parent_id => comment), remote: true, class: 'comment-post'
-            = link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), class: 'delete_comment_link', remote:true, method: :delete, data: { confirm: 'Are you sure?' }
+            = link_to 'Delete', post_comment_path(post_id: comment.post.id, id: comment.id), class: 'delete_comment_link', remote: true, method: :delete, data: {confirm: 'Are you sure?'}
 
-  = render partial: "comments/nested",  locals: {comments: comment.descendants.arrange}
-
+  = render partial: 'comments/nested', locals: {comments: comment.descendants.arrange}

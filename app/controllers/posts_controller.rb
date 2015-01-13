@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy, :vote]
   before_action :check_auth, only: [:edit, :update, :destroy]
 
-
+  COMMENT_CONTAINER_ID_PREFIX = 'comment-id-'
 
   # GET /posts
   # GET /posts.json
@@ -16,17 +16,19 @@ class PostsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @posts, except: :updated_at, include: {user: {only: name}}}
+      format.json { render json: @posts, except: :updated_at, :include => {:user => {:only => [:name]}}}
     end
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @comment_container_id_prefix = CommentsController::COMMENT_CONTAINER_ID_PREFIX
+    #@post = Post.find(params[:id])
+    @comment = Comment.new
+    @comment_container_id_prefix = COMMENT_CONTAINER_ID_PREFIX
     respond_to do |format|
       format.html
-      format.json { render json: @post, except: :updated_at, include: {user: {only: name}}}
+      format.json { render json: @post, except: :updated_at, :include => {:user => {:only => [:name]}}}
     end
   end
 
@@ -106,30 +108,26 @@ class PostsController < ApplicationController
 
   def vote
     message = 'Error'
-
     if current_user and current_user != @post.user
-      @vote = @post.votes.find_by_user_id(current_user.id)
+      @vote = Vote.find_by_user_id_and_votable_id_and_votable_type(current_user.id, @post.id, @post.class.name)
       if @vote
         if @vote.score.to_s == params[:score]
-          message = 'You can not vote twice.'
+          message = "You can't vote twice."
         else
           @vote.score = params[:score]
           @vote.destroy
           message = 'Your vote is reverted.'
         end
       else
-        @vote = @post.votes.build(user: current_user , score: params[:score])
+        @vote = Vote.new(:user => current_user , :score => params[:score], votable_id: @post.id, votable_type: @post.class.name)
         if @vote.save
           message = 'Your vote is counted.'
         else
           message = 'Unsaved.'
         end
       end
-    else if current_user and current_user == @post.user
-           message = 'You can not vote for your own posts!'
-         else
-           message = 'Please login first!'
-         end
+    else
+      message = 'Please login first!'
     end
 
     respond_to do |format|
@@ -137,16 +135,17 @@ class PostsController < ApplicationController
       format.js {render json: {message: message, total_score: @post.total_score}.to_json }
       format.json { head :no_content }
     end
+
   end
 
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_post
+    id = params[:id].blank? ? params[:post_id] : params[:id]
+    @post = Post.find(id)
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
     params.require(:post).permit(:title, :body)
   end

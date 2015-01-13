@@ -1,5 +1,8 @@
 class Comment < ActiveRecord::Base
+
+  include VoteModule
   has_ancestry
+
   belongs_to :post
   belongs_to :user
 
@@ -13,4 +16,5 @@ class Comment < ActiveRecord::Base
   def touch_post
     self.post.touch
   end
+
 end

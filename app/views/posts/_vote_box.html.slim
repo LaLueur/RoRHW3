@@ -1,5 +1,5 @@
-div.rating
-  div = link_to(image_tag('arrow_up.png'), votes_path(:score => '1', :id => @post.id), remote: true, :class => 'vote-link-up', :method => :post)
-  div#post-total-score align='center'
+div class = "rating"
+  div = link_to(image_tag('arrow_up.png'), post_vote_path(@post, :score => '1'), :method => :post, :class => 'vote-link-up')
+  div#post-total-score align = "center"
     = @post.total_score
-  div= link_to(image_tag('arrow_down.png'), votes_path(:score => '-1', :id => @post.id), remote: true, :class => 'vote-link-down', :method => :post)
+  div= link_to(image_tag('arrow_down.png'), post_vote_path(@post, :score => '-1'), :method => :post, :class => 'vote-link-down')

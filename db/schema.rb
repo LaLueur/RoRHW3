@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208003542) do
+ActiveRecord::Schema.define(version: 20150111011813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20141208003542) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ancestry"
+    t.integer  "total_score", default: 0
   end
 
   add_index "comments", ["ancestry"], name: "index_comments_on_ancestry", using: :btree
@@ -58,14 +59,15 @@ ActiveRecord::Schema.define(version: 20141208003542) do
   end
 
   create_table "votes", force: true do |t|
-    t.integer  "post_id"
+    t.integer  "votable_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "score"
+    t.string   "votable_type"
   end
 
-  add_index "votes", ["post_id"], name: "index_votes_on_post_id", using: :btree
   add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
+  add_index "votes", ["votable_id"], name: "index_votes_on_votable_id", using: :btree
 
 end

@@ -4,6 +4,8 @@ default: &default
   encoding: unicode
   hostname: localhost
   port: 5432
+  username: votecom
+  password: 0302jkak
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
@@ -11,21 +13,15 @@ default: &default
 
 development:
   <<: *default
-  database: RoRHW3_development
-  username: RoRHW3
-  password: rorhw3_pass
+  database: votecom_development
 
 test:
   <<: *default
-  database: RoRHW3_test
-  username: RoRHW3
-  password: rorhw3_pass
+  database: votecom_test
 
 production:
   <<: *default
-  database: RoRHW3_production
-  username: RoRHW3
-  password: rorhw3_pass
+  database: votecom_production
 
 
 

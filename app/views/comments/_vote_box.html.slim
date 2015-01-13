@@ -1,0 +1,5 @@
+div class = "rating"
+  div = link_to(image_tag('arrow_up.png'), post_comment_vote_path(:post_id => comment.post_id, :comment_id => comment.id, :score => '1'),  :method => :post, :class => 'vote-link-up')
+  div#post-total-score align = "center"
+    = comment.total_score
+  div= link_to(image_tag('arrow_down.png'), post_comment_vote_path(:post_id => comment.post_id, :comment_id => comment.id, :score => '-1'),  :method => :post, :class => 'vote-link-down')

@@ -14,9 +14,10 @@ class CommentsController < ApplicationController
   end
 
   def create
+    @post = Post.find(params[:post_id])
+    @comment_container_id_prefix = COMMENT_CONTAINER_ID_PREFIX
     @comment = Comment.new(comment_params)
     @comment.user = current_user if current_user
-    @comment_container_id_prefix = COMMENT_CONTAINER_ID_PREFIX
     if @comment.save
       render partial: 'comments/comment', locals: {comment: @comment}
     else
@@ -43,6 +44,40 @@ class CommentsController < ApplicationController
                                comment_deleted: comment_deleted}.to_json }
       format.json { head :no_content }
     end
+  end
+
+  def vote
+    @comment = Comment.find(params[:comment_id])
+    message = 'Error'
+    if current_user and current_user != @comment.user
+      @vote = Vote.find_by_user_id_and_votable_id_and_votable_type(current_user.id, @comment.id, @comment.class.name)
+      if @vote
+        if @vote.score.to_s == params[:score]
+          message = "You can't vote twice."
+        else
+          @vote.score = params[:score]
+          @vote.destroy
+          message = 'Your vote is reverted.'
+        end
+      else
+        @vote = Vote.new(:user => current_user , :score => params[:score], votable_id: @comment.id, votable_type: @comment.class.name)
+        if @vote.save
+          message = 'Your vote is counted.'
+        else
+          message = 'Unsaved.'
+        end
+      end
+    else
+      message = 'Please login first!'
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @comment.post, notice: message }
+      #format.js {render json: {message: message, total_score: @post.total_score}.to_json }
+      format.json { head :no_content }
+    end
+
+
   end
 
 
